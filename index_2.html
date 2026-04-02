@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ultimate Audio · Prémium Hangszórók Budapest</title>
+  <meta name="description" content="Svéd, német és finn prémium hangszórórendszerek személyes meghallgatása Budapesten. DLS, Avantgarde Colibri, Amphion." />
+  <meta property="og:title" content="Ultimate Audio · Prémium Hangszórók Budapest" />
+  <meta property="og:description" content="Három ország, három hangfilozófia. Személyes meghallgatás a budapesti showroomban." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: #0a0a0a; color: #fff; font-family: 'Outfit', sans-serif; -webkit-font-smoothing: antialiased; }
+    input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.22); }
+    select option { background: #1a1a1a; color: #fff; }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: #0a0a0a; }
+    ::-webkit-scrollbar-thumb { background: rgba(200,169,110,0.25); border-radius: 3px; }
+    @keyframes float { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(8px); } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    .hero-content { animation: fadeUp 1s ease-out 0.2s both; }
+
+    @media (max-width: 768px) {
+      .product-wrapper { align-items: stretch !important; }
+      .product-inner { flex-direction: column !important; width: 100% !important; max-width: 100% !important; height: auto !important; }
+      .product-image { flex: none !important; width: 100% !important; height: 260px !important; border-radius: 12px 12px 0 0 !important; }
+      .product-text { flex: none !important; width: 100% !important; border-radius: 0 0 12px 12px !important; border-left: none !important; border-top: 2px solid rgba(255,255,255,0.06) !important; padding: 28px 24px !important; }
+      .product-text.closed { height: 0 !important; padding: 0 !important; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState } = React;
+
+    /* ═══════════ ADATOK ═══════════ */
+    const products = [
+      {
+        id: 1, name: "Flatbox XL", brand: "DLS · Svédország",
+        price: "Kérjen személyes árajánlatot",
+        image: "https://usercontent.one/wp/dls.se/wp-content/uploads/2020/03/FlatboxXLVitMiljo_1to1_nogrill.jpg?media=1767615757",
+        color: "#7BA7BC",
+        description: "Falra szerelhető, minimalista dizájnú hangszóró — szinte láthatatlanul simul az otthonába. Kettő darab 4 colos mélyközép meghajtó és 30 mm-es szövet magassugárzó biztosítja a gazdag, részletgazdag hangzást zenéhez és házimozi rendszerekhez egyaránt.",
+        specs: "2×4\" meghajtó · 30mm tweeter · 65–25 000 Hz · 89 dB · Falra szerelhető",
+      },
+      {
+        id: 2, name: "Flatbox Slim XL", brand: "DLS · Svédország",
+        price: "Kérjen személyes árajánlatot",
+        image: "https://usercontent.one/wp/dls.se/wp-content/uploads/2020/02/H-FB110149-W_pic4.jpg?media=1767615757",
+        color: "#7BA7BC",
+        description: "Az ultra-vékony kivitel a DLS svéd precizitásának csúcsa. Mindössze néhány centiméter mélységgel szól úgy, mint egy nagyméretű hangfal. Méretes szobákat tölt meg természetes, kiegyensúlyozott hanggal, miközben vizuálisan eltűnik a falban.",
+        specs: "Ultra-slim profil · Fali tartóval · Fehér / Fekete · Svéd gyártás",
+      },
+      {
+        id: 3, name: "Colibri C2", brand: "Avantgarde Acoustic · Németország",
+        price: "Prémium kategória · Kérjen árajánlatot",
+        image: "https://amphion.fi/wp-content/uploads/2025/09/7_Argon3X-768x685.webp",
+        color: "#C8A96E",
+        description: "A német Avantgarde Acoustic 30 éves kürtös technológiáját sűríti kompakt méretbe. 98 dB hatásfok, 117 dB maximális hangnyomás — szférikus kürttel és ultrakönnyű meghajtókkal. Az érzelem és a dinamika megtestesítője.",
+        specs: "2 utas kürtös rendszer · 70–19 000 Hz · 98 dB hatásfok · 117 dB max SPL · 18,5 kg",
+      },
+      {
+        id: 4, name: "Helium510", brand: "Amphion · Finnország",
+        price: "Erősítő + 2 hangfal: 1 300 €-tól",
+        image: "https://amphion.fi/wp-content/uploads/2025/09/13_Helium510-768x559.webp",
+        color: "#A8B5A2",
+        description: "Kézzel készített finn hangszóró, stúdióminőségű hangzással az otthonodban. Az Amphion 1998 óta gyárt Finnországban — a természet ihlette tartósság és a precíz hangvisszaadás jellemzi minden termékét. Ez a belépő a prémium világba.",
+        specs: "Kézzel készült Finnországban · Polc hangszóró · Komplett rendszer elérhető áron",
+      },
+      {
+        id: 5, name: "Argon3S", brand: "Amphion · Finnország",
+        price: "Kérjen személyes árajánlatot",
+        image: "https://amphion.fi/wp-content/uploads/2025/09/10_Argon3S-768x676.webp",
+        color: "#A8B5A2",
+        description: "Stúdióminőségű hangzás otthoni környezetben. Az Argon széria az Amphion profi monitorjaiból merít — ugyanaz a pontosság és részletgazdagság, ami a világ legjobb stúdióiban bizonyít, de otthoni használatra optimalizálva.",
+        specs: "Stúdió örökség · Polc hangszóró · Kézműves finn minőség",
+      },
+      {
+        id: 6, name: "Argon7LS", brand: "Amphion · Finnország",
+        price: "Kérjen személyes árajánlatot",
+        image: "https://amphion.fi/wp-content/uploads/2025/09/12_Argon7LS-768x1536.webp",
+        color: "#A8B5A2",
+        description: "Az Amphion álló hangszóró zászlóshajója. Lélegzetelállító teljesítmény mély érzelmi hatással — a természetes hangzás és az elegáns skandináv forma találkozása. Nagyobb tereket is könnyedén betölt.",
+        specs: "Álló hangszóró · Referencia kategória · Mély, érzelmes hangzás",
+      },
+    ];
+
+    const brandSections = [
+      { key: "dls", name: "DLS", country: "Svédország", tagline: "Minimalista dizájn, maximális hangzás", description: "Svéd precizitás 1979 óta. A Flatbox sorozat falra szerelhető hangszórói láthatatlanul olvadnak bele az otthonába — miközben gazdag, kiegyensúlyozott hangot adnak órákon át, fáradtság nélkül.", color: "#7BA7BC", ids: [1, 2] },
+      { key: "colibri", name: "Avantgarde Colibri", country: "Németország", tagline: "Teljesítmény a könnyűségből", description: "A német Avantgarde Acoustic 30 éves kürtös piaci vezető pozícióját sűríti kompakt formába. A Colibri C2 a high-end világ egyik legizgalmasabb újdonsága — intenzív, dinamikus, lenyűgöző.", color: "#C8A96E", ids: [3] },
+      { key: "amphion", name: "Amphion", country: "Finnország", tagline: "Kézzel készített, 1998 óta", description: "A finn természet ihlette tartósság és minőség. Minden Amphion hangszóró kézzel készül Finnországban — a stúdiókból ismert pontosság most az Ön nappalijában.", color: "#A8B5A2", ids: [4, 5, 6] },
+    ];
+
+    /* ═══════════ TERMÉKKÁRTYA ═══════════ */
+    function ProductCard({ product, index }) {
+      const [isOpen, setIsOpen] = useState(false);
+
+      return (
+        <div className="product-wrapper" style={{ width: "100%", maxWidth: 1013, margin: "0 auto 56px auto", display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <div className="product-inner"
+            style={{ position: "relative", display: "flex", flexDirection: "row", alignItems: "stretch", width: "100%", maxWidth: 1013, height: 522, transition: "all 0.6s cubic-bezier(0.4,0,0.2,1)", cursor: isOpen ? "default" : "pointer", minWidth: 280, borderRadius: 12, overflow: "hidden" }}
+            onClick={() => !isOpen && setIsOpen(true)}>
+
+            <div className="product-image"
+              style={{ flex: isOpen ? "0 0 52%" : "0 0 100%", transition: "all 0.6s cubic-bezier(0.4,0,0.2,1)", position: "relative", overflow: "hidden", background: "linear-gradient(145deg, #161616 0%, #0e0e0e 100%)" }}>
+              <img src={product.image} alt={product.name} loading="lazy"
+                style={{ width: "100%", height: "100%", objectFit: "contain", display: "block", filter: "brightness(0.92) contrast(1.03)", transition: "filter 0.4s", padding: 24 }}
+                onMouseOver={(e) => !isOpen && (e.target.style.filter = "brightness(1) contrast(1.06)")}
+                onMouseOut={(e) => (e.target.style.filter = "brightness(0.92) contrast(1.03)")} />
+              {!isOpen && (
+                <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "80px 28px 24px", background: "linear-gradient(transparent, rgba(14,14,14,0.95))" }}>
+                  <p style={{ fontSize: 11, letterSpacing: 3, textTransform: "uppercase", color: product.color, margin: "0 0 4px", opacity: 0.9 }}>{product.brand}</p>
+                  <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 28, fontWeight: 400, color: "#fff", margin: "0 0 8px" }}>{product.name}</h2>
+                  <p style={{ fontSize: 11, color: "rgba(255,255,255,0.45)", letterSpacing: 1.5 }}>KATTINTSON A RÉSZLETEKÉRT →</p>
+                </div>
+              )}
+            </div>
+
+            <div className={`product-text${isOpen ? "" : " closed"}`}
+              style={{ flex: isOpen ? "0 0 48%" : "0 0 0%", opacity: isOpen ? 1 : 0, overflow: "hidden", transition: "all 0.6s cubic-bezier(0.4,0,0.2,1)", background: "linear-gradient(160deg, #151515, #0b0b0b)", borderRadius: "0 12px 12px 0", display: "flex", flexDirection: "column", justifyContent: "center", padding: isOpen ? "36px 32px" : "36px 0", position: "relative", borderLeft: isOpen ? `2px solid ${product.color}30` : "none" }}>
+
+              <button onClick={(e) => { e.stopPropagation(); setIsOpen(false); }}
+                style={{ position: "absolute", top: 14, right: 14, width: 32, height: 32, borderRadius: "50%", border: "1px solid rgba(255,255,255,0.12)", background: "rgba(255,255,255,0.04)", color: "#888", fontSize: 16, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.3s" }}
+                onMouseOver={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.1)"; e.currentTarget.style.color = "#fff"; }}
+                onMouseOut={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.04)"; e.currentTarget.style.color = "#888"; }}>✕</button>
+
+              <p style={{ fontSize: 11, letterSpacing: 3, textTransform: "uppercase", color: product.color, margin: "0 0 6px", whiteSpace: "nowrap" }}>{product.brand}</p>
+              <h3 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 24, fontWeight: 400, color: "#fff", margin: "0 0 16px", lineHeight: 1.2 }}>{product.name}</h3>
+              <p style={{ fontSize: 13, color: "rgba(255,255,255,0.6)", lineHeight: 1.75, margin: "0 0 14px" }}>{product.description}</p>
+              <p style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", margin: "0 0 14px", letterSpacing: 0.5, lineHeight: 1.6 }}>{product.specs}</p>
+
+              <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)", paddingTop: 14, marginTop: "auto" }}>
+                <p style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 17, color: product.color, margin: "0 0 14px", fontWeight: 500 }}>{product.price}</p>
+                <a href="#contact" onClick={(e) => { e.preventDefault(); e.stopPropagation(); document.getElementById("contact").scrollIntoView({ behavior: "smooth" }); }}
+                  style={{ display: "inline-block", padding: "11px 24px", background: product.color, color: "#0a0a0a", fontSize: 12, fontWeight: 600, letterSpacing: 1.5, textTransform: "uppercase", textDecoration: "none", borderRadius: 6, transition: "opacity 0.3s", cursor: "pointer" }}
+                  onMouseOver={(e) => (e.target.style.opacity = "0.85")} onMouseOut={(e) => (e.target.style.opacity = "1")}>Érdeklődöm</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    /* ═══════════ FORM ═══════════ */
+    function ContactForm() {
+      const [fd, setFd] = useState({ name: "", email: "", phone: "", interest: "", message: "" });
+      const [sent, setSent] = useState(false);
+      const upd = (k) => (e) => setFd((p) => ({ ...p, [k]: e.target.value }));
+
+      const submit = () => {
+        if (!fd.name || (!fd.email && !fd.phone)) return;
+        setSent(true);
+      };
+
+      const iS = { width: "100%", padding: "13px 16px", background: "rgba(255,255,255,0.035)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 8, color: "#fff", fontFamily: "'Outfit', sans-serif", fontSize: 14, outline: "none", transition: "border-color 0.3s", boxSizing: "border-box" };
+      const foc = (e) => (e.target.style.borderColor = "rgba(200,169,110,0.4)");
+      const blu = (e) => (e.target.style.borderColor = "rgba(255,255,255,0.08)");
+
+      if (sent) return (
+        <div style={{ textAlign: "center", padding: "50px 20px" }}>
+          <div style={{ width: 56, height: 56, borderRadius: "50%", background: "rgba(200,169,110,0.15)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px", fontSize: 24, color: "#C8A96E" }}>✓</div>
+          <h3 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 26, color: "#fff", fontWeight: 400, marginBottom: 10 }}>Köszönjük érdeklődését!</h3>
+          <p style={{ fontSize: 14, color: "rgba(255,255,255,0.5)", lineHeight: 1.7 }}>24 órán belül felvesszük Önnel a kapcsolatot<br/>és egyeztetünk egy személyes meghallgatási időpontot.</p>
+        </div>
+      );
+
+      return (
+        <div style={{ maxWidth: 500, margin: "0 auto" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+            <input type="text" placeholder="Név *" value={fd.name} onChange={upd("name")} style={iS} onFocus={foc} onBlur={blu} />
+            <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
+              <input type="email" placeholder="E-mail cím" value={fd.email} onChange={upd("email")} style={{ ...iS, flex: "1 1 200px" }} onFocus={foc} onBlur={blu} />
+              <input type="tel" placeholder="Telefon" value={fd.phone} onChange={upd("phone")} style={{ ...iS, flex: "1 1 160px" }} onFocus={foc} onBlur={blu} />
+            </div>
+            <select value={fd.interest} onChange={upd("interest")} style={{ ...iS, color: fd.interest ? "#fff" : "rgba(255,255,255,0.22)", appearance: "none", backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%23666' fill='none' stroke-width='1.5'/%3E%3C/svg%3E")`, backgroundRepeat: "no-repeat", backgroundPosition: "right 16px center" }}>
+              <option value="">Melyik márka érdekli?</option>
+              <option value="dls">DLS Flatbox (Svéd)</option>
+              <option value="colibri">Avantgarde Colibri C2 (Német)</option>
+              <option value="amphion">Amphion (Finn)</option>
+              <option value="all">Mindegyik érdekel</option>
+            </select>
+            <textarea placeholder="Üzenete (opcionális)" value={fd.message} onChange={upd("message")} rows={3} style={{ ...iS, resize: "vertical" }} onFocus={foc} onBlur={blu} />
+            <button onClick={submit} style={{ width: "100%", padding: "15px", background: "linear-gradient(135deg, #C8A96E, #A8894E)", border: "none", borderRadius: 8, color: "#0a0a0a", fontSize: 13, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase", cursor: "pointer", transition: "opacity 0.3s" }}
+              onMouseOver={(e) => (e.target.style.opacity = "0.9")} onMouseOut={(e) => (e.target.style.opacity = "1")}>Személyes bemutató foglalás</button>
+            <p style={{ fontSize: 11, color: "rgba(255,255,255,0.25)", textAlign: "center", marginTop: 2 }}>* Név és legalább egy elérhetőség szükséges · Ingyenes, kötelezettségmentes</p>
+          </div>
+        </div>
+      );
+    }
+
+    /* ═══════════ MÁRKA DIVIDER ═══════════ */
+    function BrandDivider({ s }) {
+      return (
+        <div style={{ maxWidth: 800, margin: "0 auto", padding: "80px 24px 32px", textAlign: "center" }}>
+          <div style={{ width: 40, height: 1, background: s.color, margin: "0 auto 20px", opacity: 0.5 }} />
+          <p style={{ fontSize: 11, letterSpacing: 4, textTransform: "uppercase", color: s.color, marginBottom: 8, opacity: 0.8 }}>{s.country}</p>
+          <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "clamp(26px, 4vw, 38px)", fontWeight: 400, color: "#fff", margin: "0 0 8px" }}>{s.name}</h2>
+          <p style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 16, color: "rgba(255,255,255,0.4)", fontStyle: "italic", margin: "0 0 16px" }}>{s.tagline}</p>
+          <p style={{ fontSize: 14, color: "rgba(255,255,255,0.45)", lineHeight: 1.7, maxWidth: 600, margin: "0 auto" }}>{s.description}</p>
+        </div>
+      );
+    }
+
+    /* ═══════════ APP ═══════════ */
+    function App() {
+      let gi = 0;
+      return (
+        <div style={{ minHeight: "100vh", overflowX: "hidden" }}>
+          {/* HERO */}
+          <header style={{ position: "relative", minHeight: "88vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", textAlign: "center", padding: "60px 24px", overflow: "hidden" }}>
+            <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 25% 30%, rgba(200,169,110,0.05) 0%, transparent 50%), radial-gradient(ellipse at 75% 70%, rgba(123,167,188,0.03) 0%, transparent 50%), radial-gradient(ellipse at 50% 90%, rgba(168,181,162,0.03) 0%, transparent 40%)" }} />
+            {[500, 700, 900].map((sz) => <div key={sz} style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: sz, height: sz, border: `1px solid rgba(255,255,255,${0.04 - sz * 0.00003})`, borderRadius: "50%", pointerEvents: "none" }} />)}
+
+            <div className="hero-content" style={{ position: "relative", zIndex: 1 }}>
+              <p style={{ fontSize: 11, letterSpacing: 6, textTransform: "uppercase", color: "rgba(255,255,255,0.3)", marginBottom: 28 }}>Ultimate Audio · Budapest · Showroom</p>
+              <h1 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "clamp(38px, 7vw, 68px)", fontWeight: 400, lineHeight: 1.1, margin: "0 0 24px", maxWidth: 700 }}>Hallgassa meg,<br/><span style={{ color: "#C8A96E" }}>mielőtt dönt.</span></h1>
+              <p style={{ fontSize: 16, color: "rgba(255,255,255,0.45)", maxWidth: 520, lineHeight: 1.75, margin: "0 auto 36px" }}>Három ország, három hangfilozófia. Svéd, német és finn prémium hangszórórendszerek személyes meghallgatása Budapesten — ingyen, kötelezettség nélkül.</p>
+
+              <div className="brand-badges" style={{ display: "flex", gap: 20, justifyContent: "center", flexWrap: "wrap", marginBottom: 40 }}>
+                {[
+                  { l: "DLS", s: "Svédország", c: "#7BA7BC", score: "4.7", count: "89" },
+                  { l: "Colibri", s: "Németország", c: "#C8A96E", score: "4.9", count: "54" },
+                  { l: "Amphion", s: "Finnország", c: "#A8B5A2", score: "4.8", count: "127" },
+                ].map((b) => {
+                  const fullStars = Math.floor(parseFloat(b.score));
+                  const partial = Math.round((parseFloat(b.score) - fullStars) * 100);
+                  return (
+                    <div key={b.l} style={{ padding: "14px 22px 16px", border: `1px solid ${b.c}25`, borderRadius: 10, background: `${b.c}06`, textAlign: "center", minWidth: 150 }}>
+                      <p style={{ fontFamily: "'Playfair Display', serif", fontSize: 17, color: b.c, margin: 0 }}>{b.l}</p>
+                      <p style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", margin: "2px 0 10px", letterSpacing: 2, textTransform: "uppercase" }}>{b.s}</p>
+                      <div style={{ display: "flex", gap: 2, justifyContent: "center", marginBottom: 6 }}>
+                        {[1,2,3,4,5].map(i => {
+                          let bg = "#DCDCE6";
+                          if (i <= fullStars) bg = "#00B67A";
+                          else if (i === fullStars + 1 && partial > 0) bg = `linear-gradient(90deg, #00B67A ${partial}%, #DCDCE6 ${partial}%)`;
+                          return (
+                            <div key={i} style={{ width: 18, height: 18, background: bg, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 2 }}>
+                              <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M6 1L7.545 4.13L11 4.635L8.5 7.07L9.09 10.505L6 8.885L2.91 10.505L3.5 7.07L1 4.635L4.455 4.13L6 1Z" fill="#fff"/></svg>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <p style={{ fontSize: 11, color: "rgba(255,255,255,0.5)", margin: 0, fontWeight: 500 }}>{b.score} / 5</p>
+                      <p style={{ fontSize: 9, color: "rgba(255,255,255,0.25)", margin: "2px 0 0", letterSpacing: 0.3 }}>Trustpilot · {b.count} értékelés</p>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <a href="#products" style={{ display: "inline-block", padding: "15px 36px", border: "1px solid rgba(200,169,110,0.35)", borderRadius: 8, color: "#C8A96E", fontSize: 12, letterSpacing: 2, textTransform: "uppercase", textDecoration: "none", transition: "all 0.4s", cursor: "pointer" }}
+                onMouseOver={(e) => { e.target.style.background = "#C8A96E"; e.target.style.color = "#0a0a0a"; }}
+                onMouseOut={(e) => { e.target.style.background = "transparent"; e.target.style.color = "#C8A96E"; }}>Fedezze fel a termékeket</a>
+            </div>
+
+            <div style={{ position: "absolute", bottom: 28, left: "50%", transform: "translateX(-50%)", animation: "float 2.5s ease-in-out infinite", pointerEvents: "none" }}>
+              <div style={{ width: 1, height: 36, background: "linear-gradient(rgba(255,255,255,0), rgba(255,255,255,0.18))" }} />
+            </div>
+          </header>
+
+          {/* TERMÉKEK */}
+          <section id="products">
+            {brandSections.map((sec) => {
+              const sp = products.filter((p) => sec.ids.includes(p.id));
+              return (
+                <div key={sec.key}>
+                  <BrandDivider s={sec} />
+                  <div style={{ padding: "24px 24px 20px" }}>
+                    {sp.map((p) => <ProductCard key={p.id} product={p} index={gi++} />)}
+                  </div>
+                </div>
+              );
+            })}
+          </section>
+
+          {/* SHOWROOM */}
+          <section style={{ padding: "80px 24px", background: "linear-gradient(180deg, transparent, rgba(200,169,110,0.025))" }}>
+            <div style={{ maxWidth: 700, margin: "0 auto", textAlign: "center" }}>
+              <p style={{ fontSize: 11, letterSpacing: 4, textTransform: "uppercase", color: "#C8A96E", marginBottom: 14 }}>Showroom</p>
+              <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "clamp(24px, 4vw, 36px)", fontWeight: 400, color: "#fff", margin: "0 0 18px", lineHeight: 1.3 }}>Hangszórót nem képernyőn kell választani.</h2>
+              <p style={{ fontSize: 14, color: "rgba(255,255,255,0.45)", lineHeight: 1.8, margin: "0 0 32px" }}>Személyes bemutatónkon meghallgathatja mindhárom márka rendszereit, összehasonlíthatja a hangzásokat, és szakértő tanácsot kaphat — teljesen ingyen, kötelezettség nélkül.</p>
+              <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 28 }}>
+                <span style={{ fontSize: 13, color: "rgba(255,255,255,0.55)" }}>📍 1036 Budapest, Lajos utca 74-76.</span>
+                <a href="https://www.ultimateav.hu" target="_blank" rel="noopener" style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", textDecoration: "none" }}>🌐 www.ultimateav.hu</a>
+              </div>
+            </div>
+          </section>
+
+          {/* CONTACT */}
+          <section id="contact" style={{ padding: "80px 24px", background: "rgba(255,255,255,0.015)" }}>
+            <div style={{ textAlign: "center", marginBottom: 36 }}>
+              <p style={{ fontSize: 11, letterSpacing: 4, textTransform: "uppercase", color: "#C8A96E", marginBottom: 10 }}>Ingyenes bemutató</p>
+              <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "clamp(24px, 4vw, 34px)", fontWeight: 400, color: "#fff", margin: "0 0 10px" }}>Foglaljon személyes meghallgatást</h2>
+              <p style={{ fontSize: 13, color: "rgba(255,255,255,0.35)", maxWidth: 440, margin: "0 auto" }}>Hagyja el adatait, és 24 órán belül felvesszük Önnel a kapcsolatot.</p>
+            </div>
+            <ContactForm />
+          </section>
+
+          {/* FOOTER */}
+          <footer style={{ padding: "36px 24px", borderTop: "1px solid rgba(255,255,255,0.04)", textAlign: "center" }}>
+            <p style={{ fontSize: 11, color: "rgba(255,255,255,0.18)", lineHeight: 1.8 }}>Ultimate AV Kft. · 1036 Budapest, Lajos utca 74-76.<br/>DLS (Svédország) · Avantgarde Colibri (Németország) · Amphion (Finnország)</p>
+          </footer>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>
